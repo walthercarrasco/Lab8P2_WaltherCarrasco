@@ -4,6 +4,8 @@
  */
 package Main;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author HP
@@ -99,6 +101,9 @@ public class Main extends javax.swing.JFrame {
         });
     }
 
+    ArrayList<Universo> universos = new ArrayList<>();
+    ArrayList<Seres> todos = new ArrayList<>();
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
