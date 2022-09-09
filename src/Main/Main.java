@@ -4,8 +4,11 @@
  */
 package Main;
 
+import java.io.EOFException;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -30,6 +33,55 @@ public class Main extends javax.swing.JFrame {
         this.listmodel = (DefaultComboBoxModel)cb_universos.getModel();
     }
 
+    private void CargarSeres(){
+        try {  
+            File se = new File(direGene+"SeresVivos.wal");
+            s = new ArrayList();
+            Seres t;
+            if (se.exists()) {
+                  FileInputStream entrada
+                    = new FileInputStream(se);
+                ObjectInputStream objeto
+                    = new ObjectInputStream(entrada);
+                try {
+                    while ((t = (Seres) objeto.readObject()) != null) {
+                        s.add(t);
+                    }
+                } catch (EOFException e) {
+                    //encontro el final del archivo
+                }
+                objeto.close();
+                entrada.close();
+            } //fin if           
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }        
+    }
+    
+    private void CargarUniversos(){
+        try {  
+            File se = new File(direGene+"Universos.wal");
+            u = new ArrayList();
+            Universo t;
+            if (se.exists()) {
+                  FileInputStream entrada
+                    = new FileInputStream(se);
+                ObjectInputStream objeto
+                    = new ObjectInputStream(entrada);
+                try {
+                    while ((t = (Universo) objeto.readObject()) != null) {
+                        u.add(t);
+                    }
+                } catch (EOFException e) {
+                    //encontro el final del archivo
+                }
+                objeto.close();
+                entrada.close();
+            } //fin if           
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }         
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -580,6 +632,7 @@ public class Main extends javax.swing.JFrame {
         }        
     }//GEN-LAST:event_b_guardarMousePressed
 
+    
     /**
      * @param args the command line arguments
      */
@@ -627,6 +680,9 @@ public class Main extends javax.swing.JFrame {
     
     File uni = null;
     String direuniversos = "./Carpetas/Universos/";
+    
+    ArrayList<Universo> u = new ArrayList<>();
+    ArrayList<Seres> s = new ArrayList<>();
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton b_cargar;
