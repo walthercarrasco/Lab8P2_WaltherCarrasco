@@ -501,7 +501,83 @@ public class Main extends javax.swing.JFrame {
 
     private void b_guardarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_b_guardarMousePressed
         // TODO add your handling code here:
+        FileOutputStream fw = null;
+        ObjectOutputStream bw = null;
         
+        FileOutputStream fw1 = null;
+        ObjectOutputStream bw1 = null;        
+        
+        try{
+            general = new File(direGene+"SeresVivos.wal");
+            unis = new File(direGene+"Universos.wal");
+            fw = new FileOutputStream(unis);
+            bw = new ObjectOutputStream(fw);
+            
+            for (Universo universo : universos) {
+                bw.writeObject(universo);
+            }
+            bw.flush();
+            
+            fw1 = new FileOutputStream(general);
+            bw1 = new ObjectOutputStream(fw1);
+            for (Seres ser : todos) {
+                bw1.writeObject(ser);
+            }
+            bw1.flush();
+        }catch(Exception e){
+            
+        } finally {
+            try {
+                bw.close();
+                fw.close();
+                
+                bw1.close();
+                fw1.close();
+                
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        for (Universo universo : universos) {
+            String d = direuniversos+universo.getNombre()+".wal";
+            File un = new File(d);
+            FileOutputStream f = null;
+            ObjectOutputStream b = null;
+            try{
+                f = new FileOutputStream(un);
+                b = new ObjectOutputStream(f);
+                b.writeObject(universo);                
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            try {
+                b.close();
+                f.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }        
+        
+        for (Seres ser : todos) {
+            String s = direseres+ser.getId()+".wal";
+            File un = new File(s);
+            FileOutputStream f = null;
+            ObjectOutputStream b = null;
+             try{
+                f = new FileOutputStream(un);
+                b = new ObjectOutputStream(f);
+                b.writeObject(ser);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            try {
+                b.close();
+                f.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }           
+        }        
     }//GEN-LAST:event_b_guardarMousePressed
 
     /**
@@ -544,13 +620,13 @@ public class Main extends javax.swing.JFrame {
     
     File general = null;
     File unis = null;
-    String direGene = "/Carpetas/General/";
+    String direGene = "./Carpetas/General/";
     
     File ser = null;
-    String direseres = "/Carpetas/Seres/";
+    String direseres = "./Carpetas/Seres/";
     
     File uni = null;
-    String direuniversos = "/Carpetas/Universos/";
+    String direuniversos = "./Carpetas/Universos/";
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton b_cargar;

@@ -10,6 +10,7 @@ import java.util.ArrayList;
  */
 public class Universo implements Serializable{
     
+    
     String nombre;
     ArrayList<Seres> seres = new ArrayList<>();
 
