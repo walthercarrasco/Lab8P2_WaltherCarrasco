@@ -5,7 +5,14 @@
 package Main;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -13,12 +20,14 @@ import java.util.ArrayList;
  */
 public class Main extends javax.swing.JFrame {
 
+    DefaultComboBoxModel listmodel;
     /**
      * Creates new form Main
      */
     public Main() {
         initComponents();
         this.setLocationRelativeTo(null);
+        this.listmodel = (DefaultComboBoxModel)cb_universos.getModel();
     }
 
     /**
@@ -37,10 +46,11 @@ public class Main extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTree1 = new javax.swing.JTree();
         b_guardar = new javax.swing.JButton();
+        pb_cargar = new javax.swing.JProgressBar();
         crear = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        tf_nombre = new javax.swing.JTextField();
+        tf_nombreuni = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -48,13 +58,15 @@ public class Main extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         tf_id = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
+        spinner = new javax.swing.JSpinner();
         jLabel7 = new javax.swing.JLabel();
         tf_anos = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        cb_raza = new javax.swing.JComboBox<>();
+        cb_universos = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         modificar = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         tf_anos1 = new javax.swing.JTextField();
@@ -88,6 +100,11 @@ public class Main extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTree1);
 
         b_guardar.setText("Guardar");
+        b_guardar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                b_guardarMousePressed(evt);
+            }
+        });
         b_guardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 b_guardarActionPerformed(evt);
@@ -99,25 +116,28 @@ public class Main extends javax.swing.JFrame {
         menuLayout.setHorizontalGroup(
             menuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(menuLayout.createSequentialGroup()
-                .addContainerGap(169, Short.MAX_VALUE)
+                .addGap(160, 160, 160)
                 .addGroup(menuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, menuLayout.createSequentialGroup()
                         .addComponent(b_cargar, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
                         .addComponent(b_guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(167, 167, 167))
+                    .addComponent(jScrollPane1)
+                    .addComponent(pb_cargar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(176, Short.MAX_VALUE))
         );
         menuLayout.setVerticalGroup(
             menuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(menuLayout.createSequentialGroup()
-                .addGap(33, 33, 33)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menuLayout.createSequentialGroup()
+                .addContainerGap(23, Short.MAX_VALUE)
+                .addComponent(pb_cargar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(menuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(b_cargar)
                     .addComponent(b_guardar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(54, Short.MAX_VALUE))
+                .addGap(34, 34, 34))
         );
 
         jTabbedPane1.addTab("Menu", menu);
@@ -136,15 +156,29 @@ public class Main extends javax.swing.JFrame {
 
         jLabel6.setText("Poder:");
 
-        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(1, 1, 10, 1));
+        spinner.setModel(new javax.swing.SpinnerNumberModel(1, 1, 10, 1));
 
         jLabel7.setText("Años:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Humano", "Amanto" }));
+        cb_raza.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Humano", "Amanto" }));
 
         jLabel8.setText("Raza");
 
         jLabel9.setText("Procedencia");
+
+        jButton2.setText("Crear");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jButton2MousePressed(evt);
+            }
+        });
+
+        jButton3.setText("Crear Ser");
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jButton3MousePressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout crearLayout = new javax.swing.GroupLayout(crear);
         crear.setLayout(crearLayout);
@@ -159,7 +193,9 @@ public class Main extends javax.swing.JFrame {
                             .addGroup(crearLayout.createSequentialGroup()
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tf_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(tf_nombreuni, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(37, 37, 37)
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(crearLayout.createSequentialGroup()
                         .addGap(37, 37, 37)
@@ -177,14 +213,17 @@ public class Main extends javax.swing.JFrame {
                             .addComponent(tf_id, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
                             .addGroup(crearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(tf_anos, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jSpinner1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)))
+                                .addComponent(spinner, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)))
                         .addGap(48, 48, 48)
                         .addGroup(crearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox1, 0, 147, Short.MAX_VALUE)
-                            .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(108, Short.MAX_VALUE))
+                            .addComponent(cb_raza, 0, 147, Short.MAX_VALUE)
+                            .addComponent(cb_universos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(crearLayout.createSequentialGroup()
+                        .addGap(269, 269, 269)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(107, 108, Short.MAX_VALUE))
         );
         crearLayout.setVerticalGroup(
             crearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -194,7 +233,8 @@ public class Main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(crearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tf_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tf_nombreuni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2))
                 .addGap(31, 31, 31)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -205,7 +245,7 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(crearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tf_nombreser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cb_raza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(crearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(crearLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -215,17 +255,19 @@ public class Main extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(crearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
-                            .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(spinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(crearLayout.createSequentialGroup()
                         .addGap(21, 21, 21)
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cb_universos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(crearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tf_anos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
-                .addContainerGap(90, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Crear", crear);
@@ -416,6 +458,52 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_b_guardarActionPerformed
 
+    private void jButton2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MousePressed
+        // TODO add your handling code here:
+        Pattern p = Pattern.compile("\\b[A-z0-9][A-z0-9_\\-\\s+]{0,40}");
+        Matcher m = p.matcher(tf_nombreuni.getText());
+        if(m.matches() == true){
+            universos.add(new Universo(tf_nombreuni.getText()));
+            cb_universos.setModel(listmodel);
+            DefaultComboBoxModel mo = (DefaultComboBoxModel)cb_universos.getModel();
+            for (Universo universo : universos) {
+                mo.addElement(universo);
+            }
+            cb_universos.setModel(mo);
+            tf_nombreuni.setText("");
+        }else{
+            JOptionPane.showMessageDialog(this, "El Nombre del universo debe tener por lo menos un caracter alfanumerico");
+        }
+    }//GEN-LAST:event_jButton2MousePressed
+
+    private void jButton3MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MousePressed
+        // TODO add your handling code here:
+        Pattern p = Pattern.compile("\\b[A-z0-9][A-z0-9_\\-\\s+]{0,40}");
+        Matcher m = p.matcher(tf_nombreser.getText());
+        if(m.matches() == true){
+            try{
+                if(cb_universos.getSelectedIndex() >= 0){
+                    todos.add(new Seres(Integer.parseInt(tf_id.getText()),tf_nombreser.getText()
+                            , (Integer)spinner.getValue(), universos.get(cb_universos.getSelectedIndex()).getNombre(),
+                            cb_raza.getSelectedItem().toString(), 
+                            Integer.parseInt(tf_anos.getText())));
+                    JOptionPane.showMessageDialog(this, "Creado con exito");
+                }else{
+                    JOptionPane.showMessageDialog(this, "No hay Universo");
+                }
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(this, "Ocurrio un error al guardar");
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "El Nombre del Ser debe tener por lo menos un caracter alfanumerico");            
+        }       
+    }//GEN-LAST:event_jButton3MousePressed
+
+    private void b_guardarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_b_guardarMousePressed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_b_guardarMousePressed
+
     /**
      * @param args the command line arguments
      */
@@ -456,20 +544,26 @@ public class Main extends javax.swing.JFrame {
     
     File general = null;
     File unis = null;
+    String direGene = "/Carpetas/General/";
     
     File ser = null;
+    String direseres = "/Carpetas/Seres/";
+    
     File uni = null;
+    String direuniversos = "/Carpetas/Universos/";
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton b_cargar;
     private javax.swing.JButton b_guardar;
     private javax.swing.JButton b_modificar;
     private javax.swing.JPanel buscar;
+    private javax.swing.JComboBox<String> cb_raza;
+    private javax.swing.JComboBox<String> cb_universos;
     private javax.swing.JPanel crear;
     private javax.swing.JPanel eliminar;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JComboBox<String> jComboBox5;
@@ -494,20 +588,21 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JSpinner jSpinner2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTree jTree1;
     private javax.swing.JPanel menu;
     private javax.swing.JPanel modificar;
+    private javax.swing.JProgressBar pb_cargar;
+    private javax.swing.JSpinner spinner;
     private javax.swing.JTextField tf_anos;
     private javax.swing.JTextField tf_anos1;
     private javax.swing.JTextField tf_id;
     private javax.swing.JTextField tf_id1;
     private javax.swing.JTextField tf_idbuscar;
-    private javax.swing.JTextField tf_nombre;
     private javax.swing.JTextField tf_nombrebuscar;
     private javax.swing.JTextField tf_nombreser;
     private javax.swing.JTextField tf_nombreser1;
+    private javax.swing.JTextField tf_nombreuni;
     // End of variables declaration//GEN-END:variables
 }

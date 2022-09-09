@@ -14,16 +14,18 @@ public class Seres implements Serializable{
     private int poder;
     private String universo;
     private String raza;
+    private int ano;
 
     public Seres() {
     }
 
-    public Seres(int id, String nombre, int poder, String universo, String raza) {
+    public Seres(int id, String nombre, int poder, String universo, String raza, int ano) {
         this.id = id;
         this.nombre = nombre;
         this.poder = poder;
         this.universo = universo;
         this.raza = raza;
+        this.ano = ano;
     }
 
     public int getId() {
