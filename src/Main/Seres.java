@@ -1,11 +1,13 @@
 
 package Main;
 
+import java.io.Serializable;
+
 /**
  *
  * @author HP
  */
-public class Seres {
+public class Seres implements Serializable{
     
     private int id;
     private String nombre;
@@ -64,5 +66,9 @@ public class Seres {
         this.raza = raza;
     }
 
+    @Override
+    public String toString() {
+        return nombre + "\\ID:"+id;
+    }
     
 }
