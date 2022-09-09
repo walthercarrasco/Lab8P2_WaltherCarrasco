@@ -12,10 +12,10 @@ import javax.swing.JProgressBar;
  */
 public class Hilo extends Thread{
     
-    ArrayList<Object> array = new ArrayList<>();
+    ArrayList<Seres> array = new ArrayList<>();
     JProgressBar bar;
 
-    public Hilo(JProgressBar bar, ArrayList<Object> array) {
+    public Hilo(JProgressBar bar, ArrayList<Seres> array) {
         this.bar = bar;
         this.array = array;
     }
@@ -24,7 +24,7 @@ public class Hilo extends Thread{
     public void run(){
         for (Object object : array) {
             try {
-                
+                bar.setValue(bar.getValue()+1);
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Hilo.class.getName()).log(Level.SEVERE, null, ex);

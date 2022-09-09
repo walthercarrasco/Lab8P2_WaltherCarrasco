@@ -31,6 +31,11 @@ public class Main extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         this.listmodel = (DefaultComboBoxModel)cb_universos.getModel();
+        CargarSeres();
+        CargarUniversos();
+        if(!s.isEmpty()){
+            pb_cargar.setMaximum(s.size());
+        }
     }
 
     private void CargarSeres(){
@@ -146,6 +151,11 @@ public class Main extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         b_cargar.setText("Cargar");
+        b_cargar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                b_cargarMousePressed(evt);
+            }
+        });
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Universos");
         jTree1.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
@@ -515,14 +525,29 @@ public class Main extends javax.swing.JFrame {
         Pattern p = Pattern.compile("\\b[A-z0-9][A-z0-9_\\-\\s+]{0,40}");
         Matcher m = p.matcher(tf_nombreuni.getText());
         if(m.matches() == true){
-            universos.add(new Universo(tf_nombreuni.getText()));
-            cb_universos.setModel(listmodel);
-            DefaultComboBoxModel mo = (DefaultComboBoxModel)cb_universos.getModel();
-            for (Universo universo : universos) {
-                mo.addElement(universo);
+            boolean va = true;
+            for (Universo universo : u) {
+                if(universo.getNombre().equals(tf_nombreuni.getText())){
+                    va = false;
+                }
             }
-            cb_universos.setModel(mo);
-            tf_nombreuni.setText("");
+            for (Universo universo : universos) {
+                if(universo.getNombre().equals(tf_nombreuni.getText())){
+                    va = false;
+                }
+            }            
+            if(va == true){
+                cb_universos.removeAllItems();
+                universos.add(new Universo(tf_nombreuni.getText()));
+                DefaultComboBoxModel mo = (DefaultComboBoxModel)cb_universos.getModel();
+                for (Universo universo : universos) {
+                    mo.addElement(universo);
+                }
+                cb_universos.setModel(mo);
+                tf_nombreuni.setText("");
+            }else{
+                JOptionPane.showMessageDialog(this, "Al ya hay un universo con ese nombre creado");
+            }
         }else{
             JOptionPane.showMessageDialog(this, "El Nombre del universo debe tener por lo menos un caracter alfanumerico");
         }
@@ -533,13 +558,31 @@ public class Main extends javax.swing.JFrame {
         Pattern p = Pattern.compile("\\b[A-z0-9][A-z0-9_\\-\\s+]{0,40}");
         Matcher m = p.matcher(tf_nombreser.getText());
         if(m.matches() == true){
+            boolean va = true;
             try{
                 if(cb_universos.getSelectedIndex() >= 0){
-                    todos.add(new Seres(Integer.parseInt(tf_id.getText()),tf_nombreser.getText()
-                            , (Integer)spinner.getValue(), universos.get(cb_universos.getSelectedIndex()).getNombre(),
-                            cb_raza.getSelectedItem().toString(), 
-                            Integer.parseInt(tf_anos.getText())));
-                    JOptionPane.showMessageDialog(this, "Creado con exito");
+                    int x = Integer.parseInt(tf_id.getText());
+                    boolean v = true;
+                    for (Seres seres : s) {
+                        if(seres.getId() == x){
+                            v = false;
+                        }
+                    }
+                    for (Seres seres : todos) {
+                        if(seres.getId() == x){
+                            v = false;
+                        }
+                    }                    
+                    if(v == true){
+                        todos.add(new Seres(Integer.parseInt(tf_id.getText()),tf_nombreser.getText()
+                                , (Integer)spinner.getValue(), universos.get(cb_universos.getSelectedIndex()).getNombre(),
+                                cb_raza.getSelectedItem().toString(), 
+                                Integer.parseInt(tf_anos.getText())));
+                        universos.get(cb_universos.getSelectedIndex()).getSeres().add(todos.get(todos.size()-1));
+                        JOptionPane.showMessageDialog(this, "Creado con exito");
+                    }else{
+                        JOptionPane.showMessageDialog(this, "Ya hay una persona con ese id en los arvchivos no cargados");
+                    }    
                 }else{
                     JOptionPane.showMessageDialog(this, "No hay Universo");
                 }
@@ -631,6 +674,19 @@ public class Main extends javax.swing.JFrame {
             }           
         }        
     }//GEN-LAST:event_b_guardarMousePressed
+
+    private void b_cargarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_b_cargarMousePressed
+        // TODO add your handling code here:
+        if(!s.isEmpty()){
+            todos.addAll(s);
+            pb_cargar.setMaximum(s.size());
+            Hilo h = new Hilo(pb_cargar, s);
+            h.start();
+            s = new ArrayList<>();
+        }else{
+            JOptionPane.showMessageDialog(this, "Ya se cargaron los archivos");
+        }
+    }//GEN-LAST:event_b_cargarMousePressed
 
     
     /**
