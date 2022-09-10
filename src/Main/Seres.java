@@ -28,6 +28,15 @@ public class Seres implements Serializable{
         this.ano = ano;
     }
 
+    public int getAno() {
+        return ano;
+    }
+
+    public void setAno(int ano) {
+        this.ano = ano;
+    }
+
+    
     public int getId() {
         return id;
     }

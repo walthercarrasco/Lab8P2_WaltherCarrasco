@@ -27,7 +27,6 @@ public class Hilo extends Thread{
                 bar.setValue(bar.getValue()+1);
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
-                Logger.getLogger(Hilo.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

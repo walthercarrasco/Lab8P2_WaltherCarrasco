@@ -128,17 +128,15 @@ public class Main extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         tf_anos1 = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        cb_raza1 = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
-        jComboBox4 = new javax.swing.JComboBox<>();
         tf_nombreser1 = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
         tf_id1 = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
-        jSpinner2 = new javax.swing.JSpinner();
-        jComboBox5 = new javax.swing.JComboBox<>();
+        spin = new javax.swing.JSpinner();
+        cb_mof = new javax.swing.JComboBox<>();
         b_modificar = new javax.swing.JButton();
         eliminar = new javax.swing.JPanel();
         buscar = new javax.swing.JPanel();
@@ -149,6 +147,12 @@ public class Main extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabbedPane1StateChanged(evt);
+            }
+        });
 
         b_cargar.setText("Cargar");
         b_cargar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -339,7 +343,7 @@ public class Main extends javax.swing.JFrame {
         jLabel11.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel11.setText("Ser");
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Humano", "Amanto" }));
+        cb_raza1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Humano", "Amanto" }));
 
         jLabel12.setText("Nombre");
 
@@ -347,13 +351,22 @@ public class Main extends javax.swing.JFrame {
 
         jLabel14.setText("ID:");
 
-        jLabel15.setText("Procedencia");
-
         jLabel16.setText("Poder:");
 
-        jSpinner2.setModel(new javax.swing.SpinnerNumberModel(1, 1, 10, 1));
+        spin.setModel(new javax.swing.SpinnerNumberModel(1, 1, 10, 1));
+
+        cb_mof.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cb_mofItemStateChanged(evt);
+            }
+        });
 
         b_modificar.setText("Modificar");
+        b_modificar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                b_modificarKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout modificarLayout = new javax.swing.GroupLayout(modificar);
         modificar.setLayout(modificarLayout);
@@ -375,16 +388,14 @@ public class Main extends javax.swing.JFrame {
                                 .addGroup(modificarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(tf_nombreser1, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
                                     .addComponent(tf_id1)
-                                    .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(spin, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(tf_anos1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(49, 49, 49)
                                 .addGroup(modificarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(cb_raza1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(cb_mof, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(modificarLayout.createSequentialGroup()
                         .addGap(259, 259, 259)
                         .addComponent(b_modificar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -396,7 +407,7 @@ public class Main extends javax.swing.JFrame {
                 .addGap(15, 15, 15)
                 .addComponent(jLabel11)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cb_mof, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(48, 48, 48)
                 .addGroup(modificarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(modificarLayout.createSequentialGroup()
@@ -410,7 +421,7 @@ public class Main extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(modificarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel16)
-                            .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(spin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(modificarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(tf_anos1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -418,11 +429,7 @@ public class Main extends javax.swing.JFrame {
                     .addGroup(modificarLayout.createSequentialGroup()
                         .addComponent(jLabel13)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)
-                        .addComponent(jLabel15)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cb_raza1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
                 .addComponent(b_modificar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41))
@@ -580,6 +587,10 @@ public class Main extends javax.swing.JFrame {
                                 Integer.parseInt(tf_anos.getText())));
                         universos.get(cb_universos.getSelectedIndex()).getSeres().add(todos.get(todos.size()-1));
                         JOptionPane.showMessageDialog(this, "Creado con exito");
+                        tf_nombreser.setText("");
+                        tf_anos.setText("");
+                        tf_id.setText("");                        
+                        
                     }else{
                         JOptionPane.showMessageDialog(this, "Ya hay una persona con ese id en los arvchivos no cargados");
                     }    
@@ -679,14 +690,95 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(!s.isEmpty()){
             todos.addAll(s);
+            universos.addAll(u);
             pb_cargar.setMaximum(s.size());
             Hilo h = new Hilo(pb_cargar, s);
             h.start();
             s = new ArrayList<>();
+            u = new ArrayList<>();
         }else{
             JOptionPane.showMessageDialog(this, "Ya se cargaron los archivos");
         }
     }//GEN-LAST:event_b_cargarMousePressed
+
+    private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
+        // TODO add your handling code here:
+        if(jTabbedPane1.getSelectedIndex() == 2){
+            cb_mof.removeAllItems();
+            DefaultComboBoxModel m = (DefaultComboBoxModel)cb_mof.getModel();
+            for (Seres todo : todos) {
+                m.addElement(todo);
+            }
+            cb_mof.setModel(m);
+        }else if(jTabbedPane1.getSelectedIndex() == 1){
+            cb_universos.removeAllItems();
+            DefaultComboBoxModel mo = (DefaultComboBoxModel)cb_universos.getModel();
+            for (Universo universo : universos) {
+                mo.addElement(universo);
+            }
+            cb_universos.setModel(mo);            
+        }
+    }//GEN-LAST:event_jTabbedPane1StateChanged
+
+    private void b_modificarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_modificarKeyPressed
+        // TODO add your handling code here:
+         Pattern p = Pattern.compile("\\b[A-z0-9][A-z0-9_\\-\\s+]{0,40}");
+         Matcher m = p.matcher(tf_nombreser.getText());
+        if(m.matches() == true){
+            boolean va = true;
+            try{
+                if(cb_mof.getSelectedIndex() >= 0){
+                    int x = Integer.parseInt(tf_id.getText());
+                    boolean v = true;
+                    for (Seres seres : s) {
+                        if(seres.getId() == x){
+                            v = false;
+                        }
+                    }
+                    for (Seres seres : todos) {
+                        if(seres.getId() == x){
+                            v = false;
+                        }
+                        
+                        
+                    }                    
+                    if(v == true){
+                        todos.add(new Seres(Integer.parseInt(tf_id.getText()),tf_nombreser.getText()
+                                , (Integer)spinner.getValue(), universos.get(cb_universos.getSelectedIndex()).getNombre(),
+                                cb_raza.getSelectedItem().toString(), 
+                                Integer.parseInt(tf_anos.getText())));
+                        universos.get(cb_universos.getSelectedIndex()).getSeres().add(todos.get(todos.size()-1));
+                        JOptionPane.showMessageDialog(this, "Creado con exito");
+
+                    }else{
+                        JOptionPane.showMessageDialog(this, "Ya hay una persona con ese id en los arvchivos no cargados");
+                    }    
+                }else{
+                    JOptionPane.showMessageDialog(this, "No hay Persona");
+                }
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(this, "Ocurrio un error al guardar");
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "El Nombre del Ser debe tener por lo menos un caracter alfanumerico");            
+        }        
+    }//GEN-LAST:event_b_modificarKeyPressed
+
+    private void cb_mofItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cb_mofItemStateChanged
+        // TODO add your handling code here:
+        if(cb_mof.getSelectedIndex() >= 0){
+            Seres e = todos.get(cb_mof.getSelectedIndex());
+            tf_anos1.setText(String.valueOf(e.getAno()));
+            tf_id1.setText(String.valueOf(e.getId()));
+            tf_nombreser1.setText(e.getNombre());
+            spin.setValue(e.getPoder());
+            if(e.getRaza().equalsIgnoreCase("Humano")){
+                cb_raza1.setSelectedIndex(0);
+            }else{
+                cb_raza1.setSelectedIndex(1);
+            }
+        }
+    }//GEN-LAST:event_cb_mofItemStateChanged
 
     
     /**
@@ -745,23 +837,21 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton b_guardar;
     private javax.swing.JButton b_modificar;
     private javax.swing.JPanel buscar;
+    private javax.swing.JComboBox<String> cb_mof;
     private javax.swing.JComboBox<String> cb_raza;
+    private javax.swing.JComboBox<String> cb_raza1;
     private javax.swing.JComboBox<String> cb_universos;
     private javax.swing.JPanel crear;
     private javax.swing.JPanel eliminar;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
-    private javax.swing.JComboBox<String> jComboBox5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
@@ -776,12 +866,12 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSpinner jSpinner2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTree jTree1;
     private javax.swing.JPanel menu;
     private javax.swing.JPanel modificar;
     private javax.swing.JProgressBar pb_cargar;
+    private javax.swing.JSpinner spin;
     private javax.swing.JSpinner spinner;
     private javax.swing.JTextField tf_anos;
     private javax.swing.JTextField tf_anos1;
