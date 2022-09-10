@@ -16,6 +16,9 @@ import java.util.regex.Pattern;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 /**
  *
@@ -65,14 +68,16 @@ public class Main extends javax.swing.JFrame {
     
     private void CargarUniversos(){
         try {  
-            File se = new File(direGene+"Universos.wal");
+            File n = new File(direGene+"Universos.wal");
             u = new ArrayList();
             Universo t;
-            if (se.exists()) {
+            if (n.exists()) {
                   FileInputStream entrada
-                    = new FileInputStream(se);
+                    = new FileInputStream(n);
+                  
                 ObjectInputStream objeto
                     = new ObjectInputStream(entrada);
+                
                 try {
                     while ((t = (Universo) objeto.readObject()) != null) {
                         u.add(t);
@@ -101,7 +106,7 @@ public class Main extends javax.swing.JFrame {
         menu = new javax.swing.JPanel();
         b_cargar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTree1 = new javax.swing.JTree();
+        treexd = new javax.swing.JTree();
         b_guardar = new javax.swing.JButton();
         pb_cargar = new javax.swing.JProgressBar();
         crear = new javax.swing.JPanel();
@@ -138,13 +143,15 @@ public class Main extends javax.swing.JFrame {
         spin = new javax.swing.JSpinner();
         cb_mof = new javax.swing.JComboBox<>();
         b_modificar = new javax.swing.JButton();
-        eliminar = new javax.swing.JPanel();
         buscar = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         tf_nombrebuscar = new javax.swing.JTextField();
         tf_idbuscar = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        eliminar = new javax.swing.JPanel();
+        cb_mof1 = new javax.swing.JComboBox<>();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -162,8 +169,8 @@ public class Main extends javax.swing.JFrame {
         });
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Universos");
-        jTree1.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-        jScrollPane1.setViewportView(jTree1);
+        treexd.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        jScrollPane1.setViewportView(treexd);
 
         b_guardar.setText("Guardar");
         b_guardar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -437,24 +444,16 @@ public class Main extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Modificar", modificar);
 
-        javax.swing.GroupLayout eliminarLayout = new javax.swing.GroupLayout(eliminar);
-        eliminar.setLayout(eliminarLayout);
-        eliminarLayout.setHorizontalGroup(
-            eliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 648, Short.MAX_VALUE)
-        );
-        eliminarLayout.setVerticalGroup(
-            eliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 398, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Eliminar", eliminar);
-
         jLabel17.setText("Nombre:");
 
         jLabel18.setText("ID:");
 
         jButton1.setText("Buscar");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jButton1MousePressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout buscarLayout = new javax.swing.GroupLayout(buscar);
         buscar.setLayout(buscarLayout);
@@ -491,6 +490,45 @@ public class Main extends javax.swing.JFrame {
         );
 
         jTabbedPane1.addTab("Buscar", buscar);
+
+        cb_mof1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cb_mof1ItemStateChanged(evt);
+            }
+        });
+        cb_mof1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cb_mof1ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Eliminar Ser");
+
+        javax.swing.GroupLayout eliminarLayout = new javax.swing.GroupLayout(eliminar);
+        eliminar.setLayout(eliminarLayout);
+        eliminarLayout.setHorizontalGroup(
+            eliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(eliminarLayout.createSequentialGroup()
+                .addGroup(eliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(eliminarLayout.createSequentialGroup()
+                        .addGap(94, 94, 94)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(eliminarLayout.createSequentialGroup()
+                        .addGap(56, 56, 56)
+                        .addComponent(cb_mof1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(402, Short.MAX_VALUE))
+        );
+        eliminarLayout.setVerticalGroup(
+            eliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(eliminarLayout.createSequentialGroup()
+                .addGap(98, 98, 98)
+                .addComponent(cb_mof1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(56, 56, 56)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(175, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Eliminar", eliminar);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -586,7 +624,8 @@ public class Main extends javax.swing.JFrame {
                                 cb_raza.getSelectedItem().toString(), 
                                 Integer.parseInt(tf_anos.getText())));
                         universos.get(cb_universos.getSelectedIndex()).getSeres().add(todos.get(todos.size()-1));
-                        JOptionPane.showMessageDialog(this, "Creado con exito");
+                        JOptionPane.showMessageDialog(this, "Creado con exito\n"
+                                + "Presione GUARDAR en el Menu");
                         tf_nombreser.setText("");
                         tf_anos.setText("");
                         tf_id.setText("");                        
@@ -616,9 +655,9 @@ public class Main extends javax.swing.JFrame {
         try{
             general = new File(direGene+"SeresVivos.wal");
             unis = new File(direGene+"Universos.wal");
+            
             fw = new FileOutputStream(unis);
             bw = new ObjectOutputStream(fw);
-            
             for (Universo universo : universos) {
                 bw.writeObject(universo);
             }
@@ -684,13 +723,13 @@ public class Main extends javax.swing.JFrame {
                 e.printStackTrace();
             }           
         }        
+        JOptionPane.showMessageDialog(this, "Elementos Guardados");
     }//GEN-LAST:event_b_guardarMousePressed
 
     private void b_cargarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_b_cargarMousePressed
         // TODO add your handling code here:
         if(!s.isEmpty()){
             todos.addAll(s);
-            universos.addAll(u);
             pb_cargar.setMaximum(s.size());
             Hilo h = new Hilo(pb_cargar, s);
             h.start();
@@ -699,6 +738,13 @@ public class Main extends javax.swing.JFrame {
         }else{
             JOptionPane.showMessageDialog(this, "Ya se cargaron los archivos");
         }
+        try{
+            universos.addAll(u);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        tree();
+        
     }//GEN-LAST:event_b_cargarMousePressed
 
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
@@ -717,18 +763,27 @@ public class Main extends javax.swing.JFrame {
                 mo.addElement(universo);
             }
             cb_universos.setModel(mo);            
+        }else if(jTabbedPane1.getSelectedIndex() == 0){
+            tree();
+        }else if(jTabbedPane1.getSelectedIndex() == 4){
+            cb_mof1.removeAllItems();
+            DefaultComboBoxModel m = (DefaultComboBoxModel)cb_mof.getModel();
+            for (Seres todo : todos) {
+                m.addElement(todo);
+            }
+            cb_mof1.setModel(m);            
         }
     }//GEN-LAST:event_jTabbedPane1StateChanged
 
     private void b_modificarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_modificarKeyPressed
         // TODO add your handling code here:
-         Pattern p = Pattern.compile("\\b[A-z0-9][A-z0-9_\\-\\s+]{0,40}");
-         Matcher m = p.matcher(tf_nombreser.getText());
+        Pattern p = Pattern.compile("\\b[A-z0-9][A-z0-9_\\-\\s+]{0,40}");
+        Matcher m = p.matcher(tf_nombreser1.getText());
         if(m.matches() == true){
             boolean va = true;
             try{
                 if(cb_mof.getSelectedIndex() >= 0){
-                    int x = Integer.parseInt(tf_id.getText());
+                    int x = Integer.parseInt(tf_id1.getText());
                     boolean v = true;
                     for (Seres seres : s) {
                         if(seres.getId() == x){
@@ -739,17 +794,18 @@ public class Main extends javax.swing.JFrame {
                         if(seres.getId() == x){
                             v = false;
                         }
-                        
-                        
-                    }                    
+                    }
+                    int a = Integer.parseInt(tf_anos1.getText());
                     if(v == true){
-                        todos.add(new Seres(Integer.parseInt(tf_id.getText()),tf_nombreser.getText()
-                                , (Integer)spinner.getValue(), universos.get(cb_universos.getSelectedIndex()).getNombre(),
-                                cb_raza.getSelectedItem().toString(), 
-                                Integer.parseInt(tf_anos.getText())));
-                        universos.get(cb_universos.getSelectedIndex()).getSeres().add(todos.get(todos.size()-1));
-                        JOptionPane.showMessageDialog(this, "Creado con exito");
-
+                        Seres sere = todos.get(cb_mof.getSelectedIndex());
+                        todos.get(cb_mof.getSelectedIndex()).setAno(a);
+                        todos.get(cb_mof.getSelectedIndex()).setId(x);
+                        todos.get(cb_mof.getSelectedIndex()).setRaza(cb_raza1.getItemAt(cb_raza1.getSelectedIndex()));
+                        todos.get(cb_mof.getSelectedIndex()).setPoder((Integer)spin.getValue());
+                        
+                        //universos.get(cb_universos.getSelectedIndex()).getSeres().add(todos.get(todos.size()-1));
+                        JOptionPane.showMessageDialog(this, "Modificado con exito\n"
+                                + "Presione GUARDAR en el Menu");
                     }else{
                         JOptionPane.showMessageDialog(this, "Ya hay una persona con ese id en los arvchivos no cargados");
                     }    
@@ -757,7 +813,7 @@ public class Main extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "No hay Persona");
                 }
             }catch(Exception e){
-                JOptionPane.showMessageDialog(this, "Ocurrio un error al guardar");
+                JOptionPane.showMessageDialog(this, "Ocurrio un error al Modificar");
             }
         }else{
             JOptionPane.showMessageDialog(this, "El Nombre del Ser debe tener por lo menos un caracter alfanumerico");            
@@ -780,6 +836,87 @@ public class Main extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cb_mofItemStateChanged
 
+    private void jButton1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MousePressed
+        // TODO add your handling code here:
+        boolean v = false;
+        if(!tf_idbuscar.getText().isBlank() || !tf_idbuscar.getText().isEmpty()){
+            try {
+                int x = Integer.parseInt(tf_idbuscar.getText());
+
+                for (Seres seres : s) {
+                    if(seres.getId() == x){
+                        v = true;
+                    }
+                }
+                for (Seres seres : todos) {
+                    if(seres.getId() == x){
+                        v = true;
+                    }
+                }         
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "ID erroneo");
+            }
+        }   
+        if(v == true){
+            JOptionPane.showMessageDialog(this, "Se encontro una persona con el ID");
+        }else{
+            String d = tf_nombrebuscar.getText();
+            for (Seres seres : s) {
+                if(seres.getNombre().equals(d)){
+                    v = true;
+                }
+            }
+            for (Seres seres : todos) {
+                if(seres.getNombre().equals(d)){
+                    v = true;
+                }
+            } 
+            if(v == true){
+                JOptionPane.showMessageDialog(this, "Se encontro una persona con ese nombre");
+            }else{
+                JOptionPane.showMessageDialog(this, "No se encontro a nadie");
+            }
+        }
+    }//GEN-LAST:event_jButton1MousePressed
+
+    private void cb_mof1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cb_mof1ItemStateChanged
+        if(cb_mof1.getSelectedIndex() >= 0){
+            Seres e = todos.get(cb_mof1.getSelectedIndex());
+            tf_anos1.setText(String.valueOf(e.getAno()));
+            tf_id1.setText(String.valueOf(e.getId()));
+            tf_nombreser1.setText(e.getNombre());
+            spin.setValue(e.getPoder());
+            if(e.getRaza().equalsIgnoreCase("Humano")){
+                cb_raza1.setSelectedIndex(0);
+            }else{
+                cb_raza1.setSelectedIndex(1);
+            }
+        }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cb_mof1ItemStateChanged
+
+    private void cb_mof1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_mof1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cb_mof1ActionPerformed
+
+    private void tree(){      
+        treexd = new JTree();
+        DefaultMutableTreeNode nodo = new DefaultMutableTreeNode("Universos");
+        treexd.setModel(new DefaultTreeModel(nodo));
+        
+        DefaultTreeModel m = (DefaultTreeModel)treexd.getModel();
+        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) m.getRoot();
+        for (Universo universo : universos) {
+            System.out.println(universo);
+            DefaultMutableTreeNode unn = new DefaultMutableTreeNode(universo);
+            for (Seres sere : universo.getSeres()) {
+                DefaultMutableTreeNode c = new DefaultMutableTreeNode(sere);
+                unn.add(c);
+            }
+            raiz.add(unn);
+        }
+        treexd.setModel(m);
+    }
     
     /**
      * @param args the command line arguments
@@ -838,6 +975,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton b_modificar;
     private javax.swing.JPanel buscar;
     private javax.swing.JComboBox<String> cb_mof;
+    private javax.swing.JComboBox<String> cb_mof1;
     private javax.swing.JComboBox<String> cb_raza;
     private javax.swing.JComboBox<String> cb_raza1;
     private javax.swing.JComboBox<String> cb_universos;
@@ -846,6 +984,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -867,7 +1006,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTree jTree1;
     private javax.swing.JPanel menu;
     private javax.swing.JPanel modificar;
     private javax.swing.JProgressBar pb_cargar;
@@ -882,5 +1020,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField tf_nombreser;
     private javax.swing.JTextField tf_nombreser1;
     private javax.swing.JTextField tf_nombreuni;
+    private javax.swing.JTree treexd;
     // End of variables declaration//GEN-END:variables
 }
