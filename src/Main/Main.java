@@ -10,6 +10,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -503,6 +505,11 @@ public class Main extends javax.swing.JFrame {
         });
 
         jButton4.setText("Eliminar Ser");
+        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jButton4MousePressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout eliminarLayout = new javax.swing.GroupLayout(eliminar);
         eliminar.setLayout(eliminarLayout);
@@ -898,6 +905,11 @@ public class Main extends javax.swing.JFrame {
     private void cb_mof1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_mof1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cb_mof1ActionPerformed
+
+    private void jButton4MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MousePressed
+        // TODO add your handling code here:
+             
+    }//GEN-LAST:event_jButton4MousePressed
 
     private void tree(){      
         treexd = new JTree();
